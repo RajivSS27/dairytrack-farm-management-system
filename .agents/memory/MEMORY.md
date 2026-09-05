@@ -1,0 +1,1 @@
+- [OpenAPI integer compatibility](zod-openapi-compatibility.md) — current Orval/Zod versions require numeric schemas instead of generated `z.int()`.

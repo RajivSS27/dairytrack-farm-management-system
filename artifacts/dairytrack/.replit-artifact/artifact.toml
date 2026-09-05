@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "DairyTrack"
+description = "A mobile-friendly dairy supply chain platform for villages, farms, milk collection centers, processing plants, and supermarkets."
+version = "1.0.0"
+id = "artifacts/dairytrack"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19212
+
+[services.development]
+run = "pnpm --filter @workspace/dairytrack run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/dairytrack", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/dairytrack/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19212"
+BASE_PATH = "/"

@@ -1,6 +1,6 @@
-# [Project name]
+# DairyTrack
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+DairyTrack is a mobile-friendly dairy supply chain platform that gives operations teams a clear view of milk moving from village farms through collection centers and processing plants to supermarkets.
 
 ## Run & Operate
 
@@ -22,23 +22,30 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/dairytrack` — React/Vite web application and responsive operations dashboard.
+- `artifacts/api-server` — Express API routes under `/api`.
+- `lib/api-spec/openapi.yaml` — source of truth for API contracts and generated hooks.
+- `lib/db/src/schema/dairy.ts` — Drizzle schema for the dairy network.
+- `lib/db/src/seed.ts` — idempotent demo data seed for the first milestone.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The initial milestone is intentionally read-only: it establishes the network data model and reviewable overview/directories before auth and role-specific mutations.
+- `batches.status` and `batches.sent_at` are included now so the collection-center-to-plant handoff can be tracked without a later schema break.
+- User records keep `linked_entity_id` nullable because the next milestone will use managed authentication and role-aware entity linking.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+The current build shows a live, seeded overview of villages, farms, cows, health alerts, milk collection trends, collection centers, processing plants, and supermarkets. Each directory supports responsive browsing, search, loading states, and retryable error states.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Build the platform in stages, starting with database schema and demo data; pause for review before adding auth and role-specific workflows.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- After editing `lib/api-spec/openapi.yaml`, run `pnpm --filter @workspace/api-spec run codegen`.
+- After schema edits, run `pnpm --filter @workspace/db run push`; seed demo data with `pnpm --filter @workspace/db run seed`.
 
 ## Pointers
 

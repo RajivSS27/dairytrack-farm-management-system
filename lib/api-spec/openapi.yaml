@@ -10,6 +10,10 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: DairyTrack overview operations
+  - name: reference-data
+    description: DairyTrack reference data
 paths:
   /healthz:
     get:
@@ -24,6 +28,116 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get the DairyTrack overview summary
+      responses:
+        "200":
+          description: Current overview metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /dashboard/milk-volume:
+    get:
+      operationId: getMilkVolumeTrend
+      tags: [dashboard]
+      summary: Get milk collection volume for the last seven days
+      responses:
+        "200":
+          description: Daily milk volume trend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MilkVolumePoint"
+  /villages:
+    get:
+      operationId: listVillages
+      tags: [reference-data]
+      summary: List villages
+      responses:
+        "200":
+          description: Villages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Village"
+  /farms:
+    get:
+      operationId: listFarms
+      tags: [reference-data]
+      summary: List farms
+      responses:
+        "200":
+          description: Farms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Farm"
+  /cows:
+    get:
+      operationId: listCows
+      tags: [reference-data]
+      summary: List cows
+      responses:
+        "200":
+          description: Cows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cow"
+  /collection-centers:
+    get:
+      operationId: listCollectionCenters
+      tags: [reference-data]
+      summary: List milk collection centers
+      responses:
+        "200":
+          description: Collection centers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CollectionCenter"
+  /processing-plants:
+    get:
+      operationId: listProcessingPlants
+      tags: [reference-data]
+      summary: List processing plants
+      responses:
+        "200":
+          description: Processing plants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProcessingPlant"
+  /supermarkets:
+    get:
+      operationId: listSupermarkets
+      tags: [reference-data]
+      summary: List supermarkets
+      responses:
+        "200":
+          description: Supermarkets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Supermarket"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +147,158 @@ components:
           type: string
       required:
         - status
+    DashboardSummary:
+      type: object
+      required:
+        - villages
+        - farms
+        - cows
+        - activeHealthAlerts
+        - milkCollectedToday
+        - pendingOrders
+      properties:
+        villages:
+          type: number
+        farms:
+          type: number
+        cows:
+          type: number
+        activeHealthAlerts:
+          type: number
+        milkCollectedToday:
+          type: number
+        pendingOrders:
+          type: number
+    MilkVolumePoint:
+      type: object
+      required:
+        - date
+        - liters
+      properties:
+        date:
+          type: string
+          format: date
+        liters:
+          type: number
+    Village:
+      type: object
+      required:
+        - id
+        - name
+        - district
+        - state
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        district:
+          type: string
+        state:
+          type: string
+    Farm:
+      type: object
+      required:
+        - id
+        - villageId
+        - villageName
+        - farmerName
+        - phone
+        - address
+        - cowCount
+      properties:
+        id:
+          type: number
+        villageId:
+          type: number
+        villageName:
+          type: string
+        farmerName:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        cowCount:
+          type: number
+    Cow:
+      type: object
+      required:
+        - id
+        - farmId
+        - farmName
+        - tagId
+        - breed
+        - dateOfBirth
+        - lactationStatus
+      properties:
+        id:
+          type: number
+        farmId:
+          type: number
+        farmName:
+          type: string
+        tagId:
+          type: string
+        breed:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        lactationStatus:
+          type: string
+    CollectionCenter:
+      type: object
+      required:
+        - id
+        - villageId
+        - villageName
+        - name
+        - location
+        - farmCount
+      properties:
+        id:
+          type: number
+        villageId:
+          type: number
+        villageName:
+          type: string
+        name:
+          type: string
+        location:
+          type: string
+        farmCount:
+          type: number
+    ProcessingPlant:
+      type: object
+      required:
+        - id
+        - name
+        - location
+        - batchCount
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        location:
+          type: string
+        batchCount:
+          type: number
+    Supermarket:
+      type: object
+      required:
+        - id
+        - name
+        - location
+        - orderCount
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        location:
+          type: string
+        orderCount:
+          type: number
 
