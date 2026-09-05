@@ -6,20 +6,29 @@
  * OpenAPI spec version: 0.1.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
+  CctvCamera,
+  CctvCameraInput,
   CollectionCenter,
   Cow,
   DashboardSummary,
   Farm,
+  FieldLog,
+  FieldLogInput,
+  FieldLogSummary,
   HealthStatus,
   MilkVolumePoint,
   ProcessingPlant,
@@ -28,7 +37,7 @@ import type {
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
-import type { ErrorType } from '../custom-fetch';
+import type { ErrorType , BodyType } from '../custom-fetch';
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -747,4 +756,448 @@ export function useListSupermarkets<TData = Awaited<ReturnType<typeof listSuperm
 
 
 
+
+export const getListFieldLogsUrl = () => {
+
+
+
+
+  return `/api/field-logs`
+}
+
+/**
+ * @summary List daily field worker production logs
+ */
+export const listFieldLogs = async ( options?: Parameters<typeof customFetch>[1]): Promise<FieldLog[]> => {
+
+  return customFetch<FieldLog[]>(getListFieldLogsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListFieldLogsQueryKey = () => {
+    return [
+    `/api/field-logs`
+    ] as const;
+    }
+
+
+export const getListFieldLogsQueryOptions = <TData = Awaited<ReturnType<typeof listFieldLogs>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFieldLogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListFieldLogsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listFieldLogs>>> = ({ signal }) => listFieldLogs({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listFieldLogs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListFieldLogsQueryResult = NonNullable<Awaited<ReturnType<typeof listFieldLogs>>>
+export type ListFieldLogsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List daily field worker production logs
+ */
+
+export function useListFieldLogs<TData = Awaited<ReturnType<typeof listFieldLogs>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFieldLogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListFieldLogsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateFieldLogUrl = () => {
+
+
+
+
+  return `/api/field-logs`
+}
+
+/**
+ * @summary Start a field worker session and record production
+ */
+export const createFieldLog = async (fieldLogInput: FieldLogInput, options?: Parameters<typeof customFetch>[1]): Promise<FieldLog> => {
+
+  return customFetch<FieldLog>(getCreateFieldLogUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(fieldLogInput)
+  }
+);}
+
+
+
+
+
+export const getCreateFieldLogMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFieldLog>>, TError,{data: BodyType<FieldLogInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createFieldLog>>, TError,{data: BodyType<FieldLogInput>}, TContext> => {
+
+const mutationKey = ['createFieldLog'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFieldLog>>, {data: BodyType<FieldLogInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createFieldLog(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateFieldLogMutationResult = NonNullable<Awaited<ReturnType<typeof createFieldLog>>>
+    export type CreateFieldLogMutationBody = BodyType<FieldLogInput>
+    export type CreateFieldLogMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Start a field worker session and record production
+ */
+export const useCreateFieldLog = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFieldLog>>, TError,{data: BodyType<FieldLogInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createFieldLog>>,
+        TError,
+        {data: BodyType<FieldLogInput>},
+        TContext
+      > => {
+      return useMutation(getCreateFieldLogMutationOptions(options));
+    }
+
+export const getCheckoutFieldLogUrl = (id: number,) => {
+
+
+
+
+  return `/api/field-logs/${id}/checkout`
+}
+
+/**
+ * @summary Close a field worker session
+ */
+export const checkoutFieldLog = async (id: number, options?: Parameters<typeof customFetch>[1]): Promise<FieldLog> => {
+
+  return customFetch<FieldLog>(getCheckoutFieldLogUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getCheckoutFieldLogMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutFieldLog>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof checkoutFieldLog>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['checkoutFieldLog'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkoutFieldLog>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  checkoutFieldLog(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckoutFieldLogMutationResult = NonNullable<Awaited<ReturnType<typeof checkoutFieldLog>>>
+
+    export type CheckoutFieldLogMutationError = ErrorType<void>
+
+    /**
+ * @summary Close a field worker session
+ */
+export const useCheckoutFieldLog = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkoutFieldLog>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof checkoutFieldLog>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getCheckoutFieldLogMutationOptions(options));
+    }
+
+export const getGetFieldLogSummaryUrl = () => {
+
+
+
+
+  return `/api/field-logs/summary`
+}
+
+/**
+ * @summary Get today’s field production totals
+ */
+export const getFieldLogSummary = async ( options?: Parameters<typeof customFetch>[1]): Promise<FieldLogSummary> => {
+
+  return customFetch<FieldLogSummary>(getGetFieldLogSummaryUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetFieldLogSummaryQueryKey = () => {
+    return [
+    `/api/field-logs/summary`
+    ] as const;
+    }
+
+
+export const getGetFieldLogSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getFieldLogSummary>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFieldLogSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFieldLogSummaryQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFieldLogSummary>>> = ({ signal }) => getFieldLogSummary({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFieldLogSummary>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFieldLogSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getFieldLogSummary>>>
+export type GetFieldLogSummaryQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get today’s field production totals
+ */
+
+export function useGetFieldLogSummary<TData = Awaited<ReturnType<typeof getFieldLogSummary>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFieldLogSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFieldLogSummaryQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getListCctvCamerasUrl = () => {
+
+
+
+
+  return `/api/cctv/cameras`
+}
+
+/**
+ * @summary List farm CCTV cameras
+ */
+export const listCctvCameras = async ( options?: Parameters<typeof customFetch>[1]): Promise<CctvCamera[]> => {
+
+  return customFetch<CctvCamera[]>(getListCctvCamerasUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListCctvCamerasQueryKey = () => {
+    return [
+    `/api/cctv/cameras`
+    ] as const;
+    }
+
+
+export const getListCctvCamerasQueryOptions = <TData = Awaited<ReturnType<typeof listCctvCameras>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listCctvCameras>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListCctvCamerasQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listCctvCameras>>> = ({ signal }) => listCctvCameras({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listCctvCameras>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListCctvCamerasQueryResult = NonNullable<Awaited<ReturnType<typeof listCctvCameras>>>
+export type ListCctvCamerasQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List farm CCTV cameras
+ */
+
+export function useListCctvCameras<TData = Awaited<ReturnType<typeof listCctvCameras>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listCctvCameras>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListCctvCamerasQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateCctvCameraUrl = () => {
+
+
+
+
+  return `/api/cctv/cameras`
+}
+
+/**
+ * @summary Add a farm CCTV camera
+ */
+export const createCctvCamera = async (cctvCameraInput: CctvCameraInput, options?: Parameters<typeof customFetch>[1]): Promise<CctvCamera> => {
+
+  return customFetch<CctvCamera>(getCreateCctvCameraUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(cctvCameraInput)
+  }
+);}
+
+
+
+
+
+export const getCreateCctvCameraMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCctvCamera>>, TError,{data: BodyType<CctvCameraInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createCctvCamera>>, TError,{data: BodyType<CctvCameraInput>}, TContext> => {
+
+const mutationKey = ['createCctvCamera'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCctvCamera>>, {data: BodyType<CctvCameraInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCctvCamera(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCctvCameraMutationResult = NonNullable<Awaited<ReturnType<typeof createCctvCamera>>>
+    export type CreateCctvCameraMutationBody = BodyType<CctvCameraInput>
+    export type CreateCctvCameraMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Add a farm CCTV camera
+ */
+export const useCreateCctvCamera = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCctvCamera>>, TError,{data: BodyType<CctvCameraInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createCctvCamera>>,
+        TError,
+        {data: BodyType<CctvCameraInput>},
+        TContext
+      > => {
+      return useMutation(getCreateCctvCameraMutationOptions(options));
+    }
 

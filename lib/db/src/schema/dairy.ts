@@ -87,6 +87,48 @@ export const milkCollectionsTable = pgTable("milk_collections", {
   }).notNull(),
 });
 
+export const fieldLogsTable = pgTable("field_logs", {
+  id: serial("id").primaryKey(),
+  farmId: integer("farm_id")
+    .notNull()
+    .references(() => farmsTable.id),
+  fieldWorkerName: text("field_worker_name").notNull(),
+  logDate: date("log_date", { mode: "string" }).notNull(),
+  checkIn: timestamp("check_in", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  checkOut: timestamp("check_out", { withTimezone: true }),
+  milkLiters: numeric("milk_liters", {
+    precision: 10,
+    scale: 2,
+    mode: "number",
+  }).notNull(),
+  gheeKg: numeric("ghee_kg", {
+    precision: 10,
+    scale: 2,
+    mode: "number",
+  }).notNull(),
+  dahiKg: numeric("dahi_kg", {
+    precision: 10,
+    scale: 2,
+    mode: "number",
+  }).notNull(),
+  notes: text("notes").notNull().default(""),
+  status: text("status").notNull().default("open"),
+});
+
+export const cctvCamerasTable = pgTable("cctv_cameras", {
+  id: serial("id").primaryKey(),
+  farmId: integer("farm_id")
+    .notNull()
+    .references(() => farmsTable.id),
+  name: text("name").notNull(),
+  location: text("location").notNull(),
+  streamUrl: text("stream_url"),
+  status: text("status").notNull().default("not_connected"),
+  lastSeen: timestamp("last_seen", { withTimezone: true }),
+});
+
 export const processingPlantsTable = pgTable("processing_plants", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -194,6 +236,18 @@ export const insertMilkCollectionSchema = createInsertSchema(
 ).omit({ id: true });
 export type InsertMilkCollection = z.infer<typeof insertMilkCollectionSchema>;
 export type MilkCollection = typeof milkCollectionsTable.$inferSelect;
+
+export const insertFieldLogSchema = createInsertSchema(fieldLogsTable).omit({
+  id: true,
+});
+export type InsertFieldLog = z.infer<typeof insertFieldLogSchema>;
+export type FieldLog = typeof fieldLogsTable.$inferSelect;
+
+export const insertCctvCameraSchema = createInsertSchema(cctvCamerasTable).omit({
+  id: true,
+});
+export type InsertCctvCamera = z.infer<typeof insertCctvCameraSchema>;
+export type CctvCamera = typeof cctvCamerasTable.$inferSelect;
 
 export const insertProcessingPlantSchema = createInsertSchema(
   processingPlantsTable,

@@ -126,3 +126,17 @@ button { font: inherit; }
 .data-grid::-webkit-scrollbar { height: 8px; }
 .data-grid::-webkit-scrollbar-thumb { background: hsl(193 20% 70%); border-radius: 99px; }
 ::selection { background: hsl(var(--accent) / 0.45); }
+.form-control {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.7rem;
+  background: hsl(var(--card));
+  padding: 0.65rem 0.8rem;
+  color: hsl(var(--foreground));
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.form-control::placeholder { color: hsl(var(--muted-foreground)); }
+.form-control:focus { border-color: hsl(var(--accent)); box-shadow: 0 0 0 3px hsl(var(--accent) / 0.22); }

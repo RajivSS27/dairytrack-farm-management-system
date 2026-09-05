@@ -73,3 +73,64 @@ export interface Supermarket {
   orderCount: number;
 }
 
+export interface FieldLog {
+  id: number;
+  farmId: number;
+  farmName: string;
+  fieldWorkerName: string;
+  logDate: string;
+  checkIn: string;
+  /** @nullable */
+  checkOut?: string | null;
+  milkLiters: number;
+  gheeKg: number;
+  dahiKg: number;
+  notes?: string;
+  status: string;
+}
+
+export interface FieldLogInput {
+  farmId: number;
+  /** @minLength 1 */
+  fieldWorkerName: string;
+  logDate: string;
+  /** @minimum 0 */
+  milkLiters: number;
+  /** @minimum 0 */
+  gheeKg: number;
+  /** @minimum 0 */
+  dahiKg: number;
+  notes?: string;
+}
+
+export interface FieldLogSummary {
+  milkLiters: number;
+  gheeKg: number;
+  dahiKg: number;
+  activeSessions: number;
+  completedLogs: number;
+}
+
+export interface CctvCamera {
+  id: number;
+  farmId: number;
+  farmName: string;
+  name: string;
+  location: string;
+  /** @nullable */
+  streamUrl?: string | null;
+  status: string;
+  /** @nullable */
+  lastSeen?: string | null;
+}
+
+export interface CctvCameraInput {
+  farmId: number;
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  location: string;
+  /** @nullable */
+  streamUrl?: string | null;
+}
+

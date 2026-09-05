@@ -36,7 +36,7 @@ DairyTrack is a mobile-friendly dairy supply chain platform that gives operation
 
 ## Product
 
-The current build shows a live, seeded overview of villages, farms, cows, health alerts, milk collection trends, collection centers, processing plants, and supermarkets. Each directory supports responsive browsing, search, loading states, and retryable error states.
+The current build shows a live, seeded overview of villages, farms, cows, health alerts, milk collection trends, collection centers, processing plants, and supermarkets. Field operations can record worker sessions with check-in/check-out times and daily milk, ghee, and dahi production. Farm CCTV slots can be registered with browser-compatible stream URLs and show connection status. Each directory supports responsive browsing, search, loading states, and retryable error states.
 
 ## User preferences
 
@@ -46,6 +46,8 @@ The current build shows a live, seeded overview of villages, farms, cows, health
 
 - After editing `lib/api-spec/openapi.yaml`, run `pnpm --filter @workspace/api-spec run codegen`.
 - After schema edits, run `pnpm --filter @workspace/db run push`; seed demo data with `pnpm --filter @workspace/db run seed`.
+- Feature demo records use `pnpm --filter @workspace/db run seed-features`.
+- CCTV slots intentionally accept browser-compatible HLS/WebRTC URLs; RTSP camera conversion needs a separate streaming gateway.
 
 ## Pointers
 

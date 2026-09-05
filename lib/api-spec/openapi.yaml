@@ -14,6 +14,10 @@ tags:
     description: DairyTrack overview operations
   - name: reference-data
     description: DairyTrack reference data
+  - name: field-operations
+    description: Daily field worker sessions and production logs
+  - name: cctv
+    description: Farm camera feeds
 paths:
   /healthz:
     get:
@@ -138,6 +142,100 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Supermarket"
+  /field-logs:
+    get:
+      operationId: listFieldLogs
+      tags: [field-operations]
+      summary: List daily field worker production logs
+      responses:
+        "200":
+          description: Field logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FieldLog"
+    post:
+      operationId: createFieldLog
+      tags: [field-operations]
+      summary: Start a field worker session and record production
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FieldLogInput"
+      responses:
+        "201":
+          description: Created field log
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FieldLog"
+  /field-logs/{id}/checkout:
+    post:
+      operationId: checkoutFieldLog
+      tags: [field-operations]
+      summary: Close a field worker session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Closed field log
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FieldLog"
+        "404":
+          description: Field log not found
+  /field-logs/summary:
+    get:
+      operationId: getFieldLogSummary
+      tags: [field-operations]
+      summary: Get today’s field production totals
+      responses:
+        "200":
+          description: Field production summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FieldLogSummary"
+  /cctv/cameras:
+    get:
+      operationId: listCctvCameras
+      tags: [cctv]
+      summary: List farm CCTV cameras
+      responses:
+        "200":
+          description: CCTV cameras
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CctvCamera"
+    post:
+      operationId: createCctvCamera
+      tags: [cctv]
+      summary: Add a farm CCTV camera
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CctvCameraInput"
+      responses:
+        "201":
+          description: Created CCTV camera
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CctvCamera"
 components:
   schemas:
     HealthStatus:
@@ -301,4 +399,137 @@ components:
           type: string
         orderCount:
           type: number
+    FieldLog:
+      type: object
+      required:
+        - id
+        - farmId
+        - farmName
+        - fieldWorkerName
+        - logDate
+        - checkIn
+        - milkLiters
+        - gheeKg
+        - dahiKg
+        - status
+      properties:
+        id:
+          type: number
+        farmId:
+          type: number
+        farmName:
+          type: string
+        fieldWorkerName:
+          type: string
+        logDate:
+          type: string
+          format: date
+        checkIn:
+          type: string
+          format: date-time
+        checkOut:
+          type: ["string", "null"]
+          format: date-time
+        milkLiters:
+          type: number
+        gheeKg:
+          type: number
+        dahiKg:
+          type: number
+        notes:
+          type: string
+        status:
+          type: string
+    FieldLogInput:
+      type: object
+      required:
+        - farmId
+        - fieldWorkerName
+        - logDate
+        - milkLiters
+        - gheeKg
+        - dahiKg
+      properties:
+        farmId:
+          type: number
+        fieldWorkerName:
+          type: string
+          minLength: 1
+        logDate:
+          type: string
+          format: date
+        milkLiters:
+          type: number
+          minimum: 0
+        gheeKg:
+          type: number
+          minimum: 0
+        dahiKg:
+          type: number
+          minimum: 0
+        notes:
+          type: string
+    FieldLogSummary:
+      type: object
+      required:
+        - milkLiters
+        - gheeKg
+        - dahiKg
+        - activeSessions
+        - completedLogs
+      properties:
+        milkLiters:
+          type: number
+        gheeKg:
+          type: number
+        dahiKg:
+          type: number
+        activeSessions:
+          type: number
+        completedLogs:
+          type: number
+    CctvCamera:
+      type: object
+      required:
+        - id
+        - farmId
+        - farmName
+        - name
+        - location
+        - status
+      properties:
+        id:
+          type: number
+        farmId:
+          type: number
+        farmName:
+          type: string
+        name:
+          type: string
+        location:
+          type: string
+        streamUrl:
+          type: ["string", "null"]
+        status:
+          type: string
+        lastSeen:
+          type: ["string", "null"]
+          format: date-time
+    CctvCameraInput:
+      type: object
+      required:
+        - farmId
+        - name
+        - location
+      properties:
+        farmId:
+          type: number
+        name:
+          type: string
+          minLength: 1
+        location:
+          type: string
+          minLength: 1
+        streamUrl:
+          type: ["string", "null"]
 

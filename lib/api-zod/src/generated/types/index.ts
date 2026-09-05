@@ -6,10 +6,15 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './cctvCamera';
+export * from './cctvCameraInput';
 export * from './collectionCenter';
 export * from './cow';
 export * from './dashboardSummary';
 export * from './farm';
+export * from './fieldLog';
+export * from './fieldLogInput';
+export * from './fieldLogSummary';
 export * from './healthStatus';
 export * from './milkVolumePoint';
 export * from './processingPlant';

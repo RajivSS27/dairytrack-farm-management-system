@@ -120,3 +120,138 @@ export const ListSupermarketsResponseItem = zod.object({
 export const ListSupermarketsResponse = zod.array(ListSupermarketsResponseItem)
 
 
+/**
+ * @summary List daily field worker production logs
+ */
+export const ListFieldLogsResponseItem = zod.object({
+  "id": zod.number(),
+  "farmId": zod.number(),
+  "farmName": zod.string(),
+  "fieldWorkerName": zod.string(),
+  "logDate": zod.coerce.date(),
+  "checkIn": zod.coerce.date(),
+  "checkOut": zod.coerce.date().nullish(),
+  "milkLiters": zod.number(),
+  "gheeKg": zod.number(),
+  "dahiKg": zod.number(),
+  "notes": zod.string().optional(),
+  "status": zod.string()
+})
+export const ListFieldLogsResponse = zod.array(ListFieldLogsResponseItem)
+
+
+/**
+ * @summary Start a field worker session and record production
+ */
+
+export const createFieldLogBodyMilkLitersMin = 0;
+
+export const createFieldLogBodyGheeKgMin = 0;
+
+export const createFieldLogBodyDahiKgMin = 0;
+
+
+
+export const CreateFieldLogBody = zod.object({
+  "farmId": zod.number(),
+  "fieldWorkerName": zod.string().min(1),
+  "logDate": zod.coerce.date(),
+  "milkLiters": zod.number().min(createFieldLogBodyMilkLitersMin),
+  "gheeKg": zod.number().min(createFieldLogBodyGheeKgMin),
+  "dahiKg": zod.number().min(createFieldLogBodyDahiKgMin),
+  "notes": zod.string().optional()
+})
+
+export const CreateFieldLogResponse = zod.object({
+  "id": zod.number(),
+  "farmId": zod.number(),
+  "farmName": zod.string(),
+  "fieldWorkerName": zod.string(),
+  "logDate": zod.coerce.date(),
+  "checkIn": zod.coerce.date(),
+  "checkOut": zod.coerce.date().nullish(),
+  "milkLiters": zod.number(),
+  "gheeKg": zod.number(),
+  "dahiKg": zod.number(),
+  "notes": zod.string().optional(),
+  "status": zod.string()
+})
+
+
+/**
+ * @summary Close a field worker session
+ */
+export const CheckoutFieldLogParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const CheckoutFieldLogResponse = zod.object({
+  "id": zod.number(),
+  "farmId": zod.number(),
+  "farmName": zod.string(),
+  "fieldWorkerName": zod.string(),
+  "logDate": zod.coerce.date(),
+  "checkIn": zod.coerce.date(),
+  "checkOut": zod.coerce.date().nullish(),
+  "milkLiters": zod.number(),
+  "gheeKg": zod.number(),
+  "dahiKg": zod.number(),
+  "notes": zod.string().optional(),
+  "status": zod.string()
+})
+
+
+/**
+ * @summary Get today’s field production totals
+ */
+export const GetFieldLogSummaryResponse = zod.object({
+  "milkLiters": zod.number(),
+  "gheeKg": zod.number(),
+  "dahiKg": zod.number(),
+  "activeSessions": zod.number(),
+  "completedLogs": zod.number()
+})
+
+
+/**
+ * @summary List farm CCTV cameras
+ */
+export const ListCctvCamerasResponseItem = zod.object({
+  "id": zod.number(),
+  "farmId": zod.number(),
+  "farmName": zod.string(),
+  "name": zod.string(),
+  "location": zod.string(),
+  "streamUrl": zod.string().nullish(),
+  "status": zod.string(),
+  "lastSeen": zod.coerce.date().nullish()
+})
+export const ListCctvCamerasResponse = zod.array(ListCctvCamerasResponseItem)
+
+
+/**
+ * @summary Add a farm CCTV camera
+ */
+
+
+
+
+export const CreateCctvCameraBody = zod.object({
+  "farmId": zod.number(),
+  "name": zod.string().min(1),
+  "location": zod.string().min(1),
+  "streamUrl": zod.string().nullish()
+})
+
+export const CreateCctvCameraResponse = zod.object({
+  "id": zod.number(),
+  "farmId": zod.number(),
+  "farmName": zod.string(),
+  "name": zod.string(),
+  "location": zod.string(),
+  "streamUrl": zod.string().nullish(),
+  "status": zod.string(),
+  "lastSeen": zod.coerce.date().nullish()
+})
+
+
